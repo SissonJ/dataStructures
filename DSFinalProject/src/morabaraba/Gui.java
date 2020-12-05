@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -110,9 +111,12 @@ public class Gui extends Application implements EventHandler<ActionEvent>
 						game.buttonPress(i, j);
 
 						System.out.println("This Button has been pressed " + i + j);
-					} catch (Exception ex)
+					} catch (IllegalArgumentException ex)
 					{
-
+						Alert alert = new Alert(Alert.AlertType.ERROR);
+						alert.setTitle("Error");
+						alert.setContentText(ex.getMessage());
+						alert.showAndWait();
 					}
 				}
 			}

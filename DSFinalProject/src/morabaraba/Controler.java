@@ -41,7 +41,7 @@ public class Controler
 		reset();
 	}
 
-	public void buttonPress(int x, int y)
+	public void buttonPress(int x, int y) throws IllegalArgumentException
 	{
 		if (killCow)
 		{
@@ -51,12 +51,17 @@ public class Controler
 		}
 		if (turns != 0)
 		{
-			phaseOne(x, y);
-			turns--;
-			if(player == 1) cowCountRed++;
-			else cowCountBlue++;
-			message = ""
-				
+			if(gameBoard[x][y]==0)
+			{
+				phaseOne(x, y);
+				turns--;
+				if(player == 1) cowCountRed++;
+				else cowCountBlue++;
+				message = "Player " + player + "s turn!";
+			} else
+			{
+				throw new IllegalArgumentException("This Spot is owned by Player "+ gameBoard[x][y]+"! Please choose a new location");
+			}
 		}
 
 	}
