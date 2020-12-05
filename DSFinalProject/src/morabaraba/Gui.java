@@ -20,6 +20,8 @@ public class Gui extends Application implements EventHandler<ActionEvent>
 
 	private Label messageL;
 
+	private Controler game;
+
 	public static void main(String[] args)
 	{
 		launch(args);
@@ -28,6 +30,8 @@ public class Gui extends Application implements EventHandler<ActionEvent>
 	@Override
 	public void start(Stage primaryStage) throws Exception
 	{
+		game = new Controler();
+
 		BorderPane root = new BorderPane();
 		Scene scene = new Scene(root, 625, 500);
 		primaryStage.setScene(scene);
@@ -35,7 +39,7 @@ public class Gui extends Application implements EventHandler<ActionEvent>
 
 		gameBoardB = new Button[3][8];
 
-		messageL = new Label("Player 1s Turn");
+		messageL = new Label(game.getMessage());
 
 		GridPane buttonsGP = new GridPane();
 
@@ -46,6 +50,7 @@ public class Gui extends Application implements EventHandler<ActionEvent>
 				gameBoardB[i][j] = new Button("" + i + j);
 				gameBoardB[i][j].setOnAction(this);
 				gameBoardB[i][j].setUserData("" + i + j);
+				gameBoardB[i][j].setStyle("-fx-background-color: white; -fx-border-width: 2");
 
 				if (j == 1)
 				{
@@ -90,26 +95,51 @@ public class Gui extends Application implements EventHandler<ActionEvent>
 	@Override
 	public void handle(ActionEvent ev)
 	{
-		if(ev.getSource() == resetB)
+		if (ev.getSource() == resetB)
 		{
-			//TODO call reset method and switch color
+			game.reset();
 		}
-		for(int i = 0; i< 3; i++) {
-			for(int j = 0; j< 8; j++) {
-				if(ev.getSource() == gameBoardB[i][j])
+		for (int i = 0; i < 3; i++)
+		{
+			for (int j = 0; j < 8; j++)
+			{
+				if (ev.getSource() == gameBoardB[i][j])
 				{
-					try {
-					//TODO call button method
-					//TODO call get space owner update color based off of value returned
-						System.out.println("This Button has been pressed " + i + j);
-					}catch(Exception ex)
+					try
 					{
-						
+						game.buttonPress(i, j);
+
+						System.out.println("This Button has been pressed " + i + j);
+					} catch (Exception ex)
+					{
+
 					}
 				}
 			}
 		}
-		messageL.setText(""); //TODO call get message
+		messageL.setText(game.getMessage()); // TODO call get message
+		updateGameBoard();
+	}
+
+	private void updateGameBoard()
+	{
+		// TODO
+		for (int i = 0; i < 3; i++)
+		{
+			for (int j = 0; j < 8; j++)
+			{
+				if (game.getSpaceOwner(i, j) == 0)
+				{
+					gameBoardB[i][j].setStyle("-fx-background-color: white; -fx-border-width: 2");
+				} else if (game.getSpaceOwner(i, j) == 1)
+				{
+					gameBoardB[i][j].setStyle("-fx-background-color: red; -fx-border-width: 2");
+				} else if (game.getSpaceOwner(i, j) == 2)
+				{
+					gameBoardB[i][j].setStyle("-fx-background-color: blue; -fx-border-width: 2");
+				}
+			}
+		}
 	}
 
 }
