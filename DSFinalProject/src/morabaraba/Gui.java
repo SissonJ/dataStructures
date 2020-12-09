@@ -34,7 +34,7 @@ public class Gui extends Application implements EventHandler<ActionEvent>
 		game = new Controler();
 
 		BorderPane root = new BorderPane();
-		Scene scene = new Scene(root, 625, 500);
+		Scene scene = new Scene(root, 300, 375);
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("Morabaraba");
 
@@ -51,7 +51,7 @@ public class Gui extends Application implements EventHandler<ActionEvent>
 				gameBoardB[i][j] = new Button("" + i + j);
 				gameBoardB[i][j].setOnAction(this);
 				gameBoardB[i][j].setUserData("" + i + j);
-				gameBoardB[i][j].setStyle("-fx-background-color: white; -fx-border-width: 2");
+				gameBoardB[i][j].setStyle("-fx-background-color: white; -fx-font-size: 2em");
 
 				if (j == 1)
 				{
@@ -109,8 +109,6 @@ public class Gui extends Application implements EventHandler<ActionEvent>
 					try
 					{
 						game.buttonPress(i, j);
-
-						System.out.println("This Button has been pressed " + i + j);
 					} catch (IllegalArgumentException ex)
 					{
 						Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -127,20 +125,19 @@ public class Gui extends Application implements EventHandler<ActionEvent>
 
 	private void updateGameBoard()
 	{
-		// TODO
 		for (int i = 0; i < 3; i++)
 		{
 			for (int j = 0; j < 8; j++)
 			{
 				if (game.getSpaceOwner(i, j) == 0)
 				{
-					gameBoardB[i][j].setStyle("-fx-background-color: white; -fx-border-width: 2");
+					gameBoardB[i][j].setStyle("-fx-background-color: white; -fx-font-size: 2em");
 				} else if (game.getSpaceOwner(i, j) == 1)
 				{
-					gameBoardB[i][j].setStyle("-fx-background-color: red; -fx-border-width: 2");
+					gameBoardB[i][j].setStyle("-fx-background-color: red; -fx-font-size: 2em");
 				} else if (game.getSpaceOwner(i, j) == 2)
 				{
-					gameBoardB[i][j].setStyle("-fx-background-color: blue; -fx-border-width: 2");
+					gameBoardB[i][j].setStyle("-fx-background-color: blue; -fx-font-size: 2em");
 				}
 			}
 		}

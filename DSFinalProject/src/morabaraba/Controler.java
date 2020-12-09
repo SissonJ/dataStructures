@@ -54,7 +54,8 @@ public class Controler
 			shootCow(x, y);
 			killCow = !killCow;
 			player = player == 1 ? 2 : 1;
-			message = "Player " + player + "s turn!";
+			updateMessage(5);
+			endGame();
 			return;
 		}
 		if (turns != 0)
@@ -73,12 +74,17 @@ public class Controler
 				throw new IllegalArgumentException(
 						"This Spot is owned by Player " + gameBoard[x][y] + "! Please choose a new location");
 			}
-
 		} else
 		{
-			message = "Select a cow to move!";
+			updateMessage(2);
 			if (!secondClick)
-			{ //TODO make sure this click has an adjacent spot
+			{ // make sure this click has an adjacent spot
+
+				if (!hasAdjacent(x, y))
+				{
+					throw new IllegalArgumentException(
+							"This spot has no space to move to. Please choose a new location");
+				}
 				if (gameBoard[x][y] != player)
 				{
 					throw new IllegalArgumentException(
@@ -87,7 +93,7 @@ public class Controler
 				curSpace[0] = x;
 				curSpace[1] = y;
 				secondClick = !secondClick;
-				message = "Select a spot to move to!";
+				updateMessage(3);
 				return;
 			} else
 			{
@@ -97,21 +103,59 @@ public class Controler
 					secondClick = !secondClick;
 				} else
 				{
-					throw new IllegalArgumentException(
-							"This Spot is owned by Player " + gameBoard[x][y] + "! Please choose an empty location");
+					if (gameBoard[x][y] != 0)
+					{
+						throw new IllegalArgumentException("This Spot is owned by Player " + gameBoard[x][y]
+								+ "! Please choose an empty location");
+					} else
+					{
+						throw new IllegalArgumentException(
+								"This Spot is owned by no one! Please choose an empty location");
+					}
 				}
 			}
 		}
 		if (isMill(x, y))
 		{
-			System.out.println("MILL");
 			killCow = true;
-			message = "Player " + player + " gets to kill a cow";
+			updateMessage(4);
 			return;
 		}
 		player = player == 1 ? 2 : 1;
-		message = "Player " + player + "s turn!";
-		endGame(); //TODO Message didn't update when 3rd to last cow was killed
+		updateMessage(5);
+		endGame(); // TODO Message didn't update when 3rd to last cow was killed
+	}
+
+	private void updateMessage(int source)
+	{
+		if (source == 1)
+		{
+			if (player == 1)
+			{
+				message = "Player " + player + "s turn! You have " + (turns / 2) + " cows left to place.";
+			} else
+			{
+				message = "Player " + player + "s turn! You have " + ((turns + 1) / 2) + " cows left to place.";
+			}
+		} else if (source == 2)
+		{
+			message = "Player " + player + ", select a cow to move!";
+		} else if (source == 3)
+		{
+			message = "Player " + player + ", select a spot to move to!";
+		} else if (source == 4)
+		{
+			message = "Player " + player + ", select a cow to kill!";
+		} else if (source == 5)
+		{
+			if (turns != 0)
+			{
+				updateMessage(1);
+			} else
+			{
+				updateMessage(2);
+			}
+		}
 	}
 
 	private void phaseTwoAndThree(int x, int y) throws IllegalArgumentException
@@ -244,6 +288,10 @@ public class Controler
 
 	private boolean hasAdjacent(int x, int y)
 	{
+		if (gameBoard[x][y] == 0)
+		{
+			return true;
+		}
 		for (int i = 0; i < 3; i++)
 		{
 			for (int j = 0; j < 8; j++)
@@ -260,7 +308,6 @@ public class Controler
 
 	private void shootCow(int x, int y) throws IllegalArgumentException
 	{
-		// Make sure cows in mills can't be killed minus the exception case
 		if (gameBoard[x][y] == 0 || gameBoard[x][y] == player)
 		{
 			throw new IllegalArgumentException("Can't kill an empty space or your own cow!");
@@ -285,7 +332,7 @@ public class Controler
 		if (temp)
 			throw new IllegalArgumentException("Can't kill cows in a mill");
 		gameBoard[x][y] = 0;
-		
+
 		if (player == 2)
 			cowCountRed--;
 		else
@@ -299,7 +346,7 @@ public class Controler
 
 	public void reset()
 	{
-		turns = 16;
+		turns = 24;
 		cowCountRed = 0;
 		cowCountBlue = 0;
 		killCow = false;
@@ -310,7 +357,7 @@ public class Controler
 				gameBoard[i][j] = 0;
 			}
 		}
-		message = "Player 1s turn!";
+		message = "Player 1s turn! You have 12 cows left to place.";
 		secondClick = false;
 		player = 1;
 	}
