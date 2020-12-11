@@ -12,29 +12,53 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+/**
+ * 
+ * @author julia mach
+ * @author jackb
+ *
+ * @version Fall 2020
+ *
+ *         This is our view class; it uses java FX to present a beautiful UI for
+ *      	   the player of this game 
+ *         This class interfaces with the controller
+ *     		    class that takes care of the rules
+ */
 public class Gui extends Application implements EventHandler<ActionEvent>
 {
-
+	/** Array of buttons to be displayed; buttons act as game spaces */
 	private Button[][] gameBoardB;
 
+	/** Button to reset game */
 	private Button resetB;
 
+	/** Label to display a message */
 	private Label messageL;
 
-	private Controler game;
+	/** Controller class that the gui interfaces with */
+	private Controller game;
 
+	/**
+	 * Main - launches gui
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args)
 	{
 		launch(args);
 	}
 
+	/**
+	 * start - starts the gui and initializes things like buttons and labels
+	 */
 	@Override
-	public void start(Stage primaryStage) throws Exception
+	public void start(Stage primaryStage)
 	{
-		game = new Controler();
+		game = new Controller();
 
 		BorderPane root = new BorderPane();
-		Scene scene = new Scene(root, 300, 375);
+		// these values may vary based on the amount of pixels on your physical device
+		Scene scene = new Scene(root, 350, 375);
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("Morabaraba");
 
@@ -93,6 +117,11 @@ public class Gui extends Application implements EventHandler<ActionEvent>
 		primaryStage.show();
 	}
 
+	/**
+	 * This method decides what happens when a button is pressed
+	 * 
+	 * @param ActionEven ev - communicates what button was pressed
+	 */
 	@Override
 	public void handle(ActionEvent ev)
 	{
@@ -123,6 +152,10 @@ public class Gui extends Application implements EventHandler<ActionEvent>
 		updateGameBoard();
 	}
 
+	/**
+	 * gets the space owner from the controller and updates the colors of the
+	 * buttons accordingly
+	 */
 	private void updateGameBoard()
 	{
 		for (int i = 0; i < 3; i++)
