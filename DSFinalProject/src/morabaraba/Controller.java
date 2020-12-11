@@ -7,9 +7,9 @@ package morabaraba;
  * 
  * @version Fall 2020
  * 
- * 			This class is our controller class and it takes care of all the back end.
- * 			This class stores game state, handles rules, throws exception when broken, and makes sure
- * 				everything runs smoothly.
+ *          This class is our controller class and it takes care of all the back
+ *          end. This class stores game state, handles rules, throws exception
+ *          when broken, and makes sure everything runs smoothly.
  *
  */
 public class Controller
@@ -99,7 +99,8 @@ public class Controller
 			if (!secondClick)
 			{ // make sure this click has an adjacent spot
 
-				if (!hasAdjacent(x, y))
+				if ((player == 1 && cowCountRed > 3 && !hasAdjacent(x, y))
+						|| (player == 2 && cowCountBlue > 3 && !hasAdjacent(x, y)))
 				{
 					throw new IllegalArgumentException(
 							"This spot has no space to move to. Please choose a new location");
@@ -272,7 +273,7 @@ public class Controller
 	 */
 	private boolean millCaseTwo(int x, int y)
 	{
-		//check a bunch of cases that result in mills
+		// check a bunch of cases that result in mills
 		if ((y == 1 || y == 2 || y == 0) && gameBoard[x][0] == player && gameBoard[x][1] == player
 				&& gameBoard[x][2] == player)
 		{
@@ -394,7 +395,7 @@ public class Controller
 		}
 		boolean temp = false;
 		player = player == 1 ? 2 : 1; // switch player to be able to check for that players cows
-		if (isMill(x, y)) 
+		if (isMill(x, y))
 		{
 			for (int i = 0; i < 3; i++)
 			{
